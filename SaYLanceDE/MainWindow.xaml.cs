@@ -1,4 +1,5 @@
 ﻿using SaYLance;
+using System.Reflection.Metadata;
 using System.Windows;
 namespace SaYLanceDE
 {
@@ -8,6 +9,19 @@ namespace SaYLanceDE
         {
             InitializeComponent();
             Interpreter.Run("str");
+        }
+
+        private void RunButtonClick(object sender, RoutedEventArgs e)
+        {
+            
+            try
+            {
+                string inputValue = inputTextBox.Text;
+            }
+            catch (Exception ex)
+            {
+             
+            }
         }
     }
 }

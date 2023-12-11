@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Margin="10">
+            <Label Content="Path to file"></Label>
+            <TextBox x:Name="inputTextBox" Width="300"></TextBox>
+            <Button Content="Run" Click="RunButtonClick"></Button>
+        </StackPanel>
+        <RichTextBox x:Name="richTextBox" Grid.Column="1" Margin="10"></RichTextBox>
     </Grid>
 </Window>

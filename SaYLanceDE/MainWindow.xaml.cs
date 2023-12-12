@@ -3,6 +3,7 @@ using SaYLance;
 using SaYLanceDE.src;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 namespace SaYLanceDE
 {
     public partial class MainWindow : Window
@@ -11,7 +12,7 @@ namespace SaYLanceDE
         {
             InitializeComponent();
             richTextBox.IsReadOnly = true;
-            richTextBox.Document.Blocks.Clear();
+         
         }
 
         private void RunButtonClick(object sender, RoutedEventArgs e)
@@ -28,7 +29,7 @@ namespace SaYLanceDE
                 textField.Error(ex.Message);
                 return;
             }
-
+            richTextBox.Document.Blocks.Clear();
             Interpreter interpreter = new(textField);
             interpreter.Run(filePath);
         }

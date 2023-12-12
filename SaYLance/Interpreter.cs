@@ -9,8 +9,8 @@ namespace SaYLance
     public class Interpreter
     {
         private readonly IDefaultTextIO textIO;
-        private ILanguageModel lanModel;
-        private FileReader fileReader;
+        private ILanguageModel lanModel = null;
+        private FileReader fileReader = null;
 
 
         public Interpreter(IDefaultTextIO textIO)
@@ -20,13 +20,18 @@ namespace SaYLance
         public void Run(string filePath)
         {
             fileReader = new FileReader(filePath);
-            Error? err = TryToSetLanguageModelFromHeader(fileReader.GetFirstLine());
+            Error? err = TryToSetLanguageModelFromHeader(fileReader.GetFirstLine()?.Content ?? string.Empty);
             if (err is not null)
             {
                 End(err);
                 return;
             }
             textIO.Log("Running");
+            while(!fileReader.IsEnded)
+            {
+                string line = fileReader.GetNextNonEmptyLine()?.Content ?? string.Empty;
+                textIO.Log(line);
+            }
         }
         private void End(Error? error)
         {
@@ -37,7 +42,6 @@ namespace SaYLance
                     textIO.Error(lanModel.ErrToStr(error));
                 else
                     textIO.Error(error.ToString());
-
                 return;
             }
             textIO.Log("Program was completed successfully");
@@ -63,7 +67,11 @@ namespace SaYLance
                         lanModel = new DefaultLanguageModel();
                         return null;
                     }
-
+                case "russian":
+                    {
+                        lanModel = new RusLanguageModel();
+                        return null;
+                    }
                 default:
                     int startPosition = header.IndexOf(lanModelString);
                     return ErrorMaker.UnknownLanguageModel(lanModelString, startPosition);

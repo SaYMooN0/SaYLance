@@ -1,5 +1,7 @@
-﻿using SaYLance;
-using System.Reflection.Metadata;
+﻿using Microsoft.Win32;
+using SaYLance;
+using SaYLanceDE.src;
+using System.IO;
 using System.Windows;
 namespace SaYLanceDE
 {
@@ -8,20 +10,33 @@ namespace SaYLanceDE
         public MainWindow()
         {
             InitializeComponent();
-            Interpreter.Run("str");
+            richTextBox.IsReadOnly = true;
+            richTextBox.Document.Blocks.Clear();
         }
 
         private void RunButtonClick(object sender, RoutedEventArgs e)
         {
-            
+            string filePath = "";
+            TextField textField = new(richTextBox);
             try
             {
-                string inputValue = inputTextBox.Text;
+                filePath = filePathInput.Text;
+                if (!File.Exists(filePath)) throw new FileNotFoundException($"File not found at path: {filePath}");
             }
             catch (Exception ex)
             {
-             
+                textField.Error(ex.Message);
+                return;
             }
+
+            Interpreter interpreter = new(textField);
+            interpreter.Run(filePath);
+        }
+        private void BrowseFileClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+                filePathInput.Text = openFileDialog.FileName;
         }
     }
 }

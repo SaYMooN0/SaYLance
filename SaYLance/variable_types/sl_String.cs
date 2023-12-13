@@ -1,20 +1,32 @@
-﻿namespace SaYLance.variable_types
+﻿using System.Linq;
+using SaYLance.interfaces;
+
+namespace SaYLance.variable_types
 {
-    internal class sl_String
+    internal class sl_String : Isl_TypeValue
     {
         public string Value { get; set; }
 
-        private sl_String(string value) { Value = value; }
+        private sl_String(string value)
+        {
+            Value = value;
+        }
+
+        public object GetValue() => Value;
+        public static bool IsValidFormat(string input)
+        {
+            if (string.IsNullOrEmpty(input) || input.Length < 3)
+                return false;
+
+            return (input.StartsWith("\"") && input.EndsWith("\"") && input.Count(c => c == '"') == 2) ||
+                   (input.StartsWith("'") && input.EndsWith("'") && input.Count(c => c == '\'') == 2);
+        }
+        bool Isl_TypeValue.IsValidFormat(string input) => sl_String.IsValidFormat(input);
 
         public static bool FromString(string input, out sl_String result)
         {
             result = null;
-            if (string.IsNullOrEmpty(input) || input.Length < 3)
-                return false;
-            bool isValidString = (input.StartsWith("\"") && input.EndsWith("\"") && input.Count(c => c == '"') == 2) ||
-                                 (input[0] == '\'' && input.Last() == '\'' && input.Count(c => c == '\'') == 2);
-
-            if (isValidString)
+            if (IsValidFormat(input))
             {
                 string processedString = input.Substring(1, input.Length - 2);
                 result = new sl_String(processedString);
@@ -23,7 +35,11 @@
 
             return false;
         }
+        public override string ToString()
+        {
+            return $"\"{Value}\"";
+        }
 
-        public override string ToString() { return $"\"{Value}\""; }
+
     }
 }

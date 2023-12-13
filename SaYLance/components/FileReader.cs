@@ -1,7 +1,4 @@
 ﻿using SaYLance.parsing_components;
-using System;
-using System.IO;
-
 namespace SaYLance.components
 {
     internal class FileReader : IDisposable

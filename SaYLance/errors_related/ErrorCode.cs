@@ -2,13 +2,17 @@
 {
     public enum ErrorCode
     {
-        NoHeaderFound = 0,
-        UnknownLanguageModel = 1,
-        NoTokens = 2,
-        ExpectedVariableName = 3,
-        InvalidVariableName = 4,
-        ExpectedVariableNameAndTypeDivider = 5,
-        ExpectedTypeName = 6,
-        InvalidReceivedType = 7,
+        NoHeaderFound,
+        UnknownLanguageModel,
+        NoTokens,
+        ExpectedVariableName,
+        InvalidVariableName,
+        ExpectedVariableNameAndTypeDivider,
+        ExpectedTypeName,
+        NoAssignmentWhenDefining,
+        AssignmentExpected,
+        InvalidReceivedType,
+        UnknownType,
+        NoValueReceived
     }
 }

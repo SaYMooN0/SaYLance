@@ -1,6 +1,6 @@
 ﻿namespace SaYLance.variable_types
 {
-    public enum VariableTypes
+    public enum VariableType
     {
         Null = 0,
         Int = 1,

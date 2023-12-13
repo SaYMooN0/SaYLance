@@ -1,6 +1,6 @@
 ﻿namespace SaYLance.components
 {
-    internal class VariablesContainer
+    public class StandardLib
     {
     }
 }

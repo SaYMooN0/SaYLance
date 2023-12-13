@@ -1,6 +1,8 @@
-﻿namespace SaYLance.syntax_elements
+﻿using SaYLance.interfaces;
+
+namespace SaYLance.executable
 {
-    internal class Loop
+    internal class Loop : IExecutable
     {
      
         private InstructionsBlock _instructions;
@@ -10,6 +12,10 @@
             _instructions = instructions;
             _condition = condition;
         }
-        public void Execute() { }
+
+        public Isl_TypeValue Execute(Dictionary<string, Isl_TypeValue> arguments)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

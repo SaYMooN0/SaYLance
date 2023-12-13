@@ -3,9 +3,7 @@
     public enum TokenSequenceType
     {
         None = 0,
-        Instruction = 1,
-        Block = 2,
-        Loop = 3,
-        Condition = 4
+        IExecutable = 1,
+        Value = 2,
     }
 }

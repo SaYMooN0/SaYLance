@@ -11,7 +11,7 @@ namespace SaYLance
         private readonly IDefaultTextIO textIO;
         private ILanguageModel lanModel = null;
         private FileReader fileReader = null;
-
+        private Parser parser = null;
 
         public Interpreter(IDefaultTextIO textIO)
         {
@@ -27,6 +27,7 @@ namespace SaYLance
                 return;
             }
             textIO.Log("Running");
+            parser = new(lanModel);
             while(!fileReader.IsEnded)
             {
                 string line = fileReader.GetNextNonEmptyLine()?.Content ?? string.Empty;

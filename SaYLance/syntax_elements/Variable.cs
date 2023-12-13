@@ -9,7 +9,7 @@ namespace SaYLance.syntax_elements
             throw new NotImplementedException();
         }
 
-        static bool IsStringValidForName(string str)
+        public static bool IsStringValidForName(string str)
         {
             if (string.IsNullOrEmpty(str))
                 return false;

@@ -7,11 +7,7 @@ namespace SaYLance.language_models
     {
         public string VariableDefinitionWord { get; } = "let";
         public char VariableNameAndTypeDivider { get; } = ':';
-
-        public string[] InstructionsDividers { get; } = { "\n", ";"};
-
         public string InstructionBlockOpener { get; } = "{";
-
         public string InstructionBlockCloser { get; } = "}";
 
         public string ErrToStr(Error error)

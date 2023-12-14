@@ -14,7 +14,7 @@ namespace SaYLance.std_lib
         }
         private Tuple<BasicCommand, List<Isl_TypeValue>> CommandsWithArgs { get; set; }
         private List<Isl_TypeValue> Arguments => CommandsWithArgs.Item2;
-        private BasicCommand Command => CommandsWithArgs.Item1;
+        public BasicCommand Command => CommandsWithArgs.Item1;
         public Isl_TypeValue Run()
         {
             if (Arguments.Count != Command.ArgumentsCount)

@@ -32,7 +32,13 @@ public static class ErrorMaker
     public static Error UnknownType(string type, int line, int character) =>
        new Error(ErrorCode.UnknownType, $"Received unknown type name: '{type}'", line, character);
     public static Error NoValueReceived(int line, int character) =>
-       new Error(ErrorCode.UnknownType, $"Expected value. No value received", line, character);
+       new Error(ErrorCode.NoValueReceived, $"Expected value. No value received", line, character);
     public static Error UnableToParse(string value, VariableType expectedType,  int line, int character) =>
-       new Error(ErrorCode.UnknownType, $"Failed to parse {value} into {expectedType} type", line, character);
+       new Error(ErrorCode.UnableToParse, $"Failed to parse {value} into {expectedType} type", line, character); 
+    public static Error DefinedVariableDefining(string variableName, int line) =>
+       new Error(ErrorCode.DefinedVariableDefining, $"variable '{variableName}' is already defined", line, 1);
+    public static Error UndefinedVariableDeleting(string variableName, int line) =>
+       new Error(ErrorCode.UndefinedVariableDeleting, $"Can not delete undefined variable '{variableName}'", line, 1);
+    public static Error UndefinedVariableAccessing(string variableName, int line) =>
+       new Error(ErrorCode.UndefinedVariableAccessing, $"variable '{variableName}' is not defined", line, 1);
 }

@@ -31,23 +31,35 @@ namespace SaYLance
             _TextIO.Log("Running...");
             _Parser = new(_LanModel);
             ParsingResult parsingRes = null;
+            ExecutionResult executionRes = null;
             while (!_FileReader.IsEnded)
             {
                 CodeLine? line = _FileReader.GetNextNonEmptyLine();
                 if (line is null || string.IsNullOrEmpty(line.Content))
                     continue;
                 parsingRes = _Parser.ParseCodeLine(line.Content, line.LineNumber);
-                if(!parsingRes.IsSuccess)
+                if (!parsingRes.IsSuccess)
                 {
                     End(parsingRes.Error);
                     return;
                 }
-                Executor.Execute(parsingRes.Executable);
+                executionRes = Executor.Execute(parsingRes.Executable);
+                if (!executionRes.IsSuccess)
+                {
+                    End(executionRes.Error);
+                    return;
+                }
             }
+            End();
+        }
+        private void End()
+        {
+            _FileReader.Dispose();
+            VariablesStorage.Dispose();
+            _TextIO.Log("Program ended");
         }
         private void End(Error? error)
         {
-            _FileReader.Dispose();
             if (error is not null)
             {
                 if (_LanModel is not null)
@@ -56,7 +68,7 @@ namespace SaYLance
                     _TextIO.Error(error.ToString());
                 return;
             }
-            _TextIO.Log("Program was completed successfully");
+            End();
         }
         private Error? TryToSetLanguageModelFromHeader(string header)
         {

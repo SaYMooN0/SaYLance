@@ -2,6 +2,7 @@
 using SaYLance.interfaces;
 using SaYLance.parsing_components;
 using SaYLance.results;
+using SaYLance.std_lib;
 using SaYLance.variable_types;
 using System.Text.RegularExpressions;
 
@@ -54,10 +55,7 @@ namespace SaYLance.components
                     if (!IsValueTypeOf(stringTokens[5], type))
                         return ParsingResult.ParsingError(ErrorMaker.UnableToParse(stringTokens[5], type, lineNumber, line.IndexOf(stringTokens[5])));
 
-                    AbstractExecutable executable = AbstractExecutable.VariableDefining(
-                        stringTokens[1],
-                        GetSl_ValueFromString(stringTokens[5], type)
-                    );
+                    AbstractExecutable executable = new AbstractExecutable(BasicCommandStorage.VariableDefinition(stringTokens[1], GetSl_ValueFromString(stringTokens[5], type), lineNumber), ExecutableType.Instruction);
                     return ParsingResult.Success(executable);
                 }
             }

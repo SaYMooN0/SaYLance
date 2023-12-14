@@ -2,6 +2,7 @@
 using SaYLance.results;
 using SaYLance.parsing_components;
 using SaYLance.variable_types;
+using SaYLance.errors_related;
 
 namespace SaYLance.components
 {
@@ -23,7 +24,8 @@ namespace SaYLance.components
                     }
                 case ExecutableType.Instruction:
                     {
-                        return Instruction.FromAbstract(executable).Execute();
+                        
+                        return InstructionExecution(Instruction.FromAbstract(executable));
                     }
                 case ExecutableType.InstructionsBlock:
                     {
@@ -47,6 +49,19 @@ namespace SaYLance.components
         static private ExecutionResult ConditionExecution(Condition condition)
         {
             throw new NotImplementedException();
+        }
+        static private ExecutionResult InstructionExecution(Instruction instruction)
+        {
+            try
+            {
+                return instruction.Execute();
+            }
+            catch (ExecutionException ex)
+            {
+                return ExecutionResult.ExecutionError(
+                    ex.error ?? new Error(ErrorCode.NoCodeError, ex.Message)
+                );
+            }
         }
 
         static private ExecutionResult FunctionExecution(Function function)

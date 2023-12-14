@@ -15,6 +15,6 @@ namespace SaYLance.results
             IsSuccess = isSuccess;
         }
         public static ExecutionResult ExecutionError(Error error) => new ExecutionResult(null, error, false);
-        public static ExecutionResult Success(Isl_TypeValue returnValue) => new ExecutionResult(returnValue, null, false);
+        public static ExecutionResult Success(Isl_TypeValue returnValue) => new ExecutionResult(returnValue, null, true);
     }
 }

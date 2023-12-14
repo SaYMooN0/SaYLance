@@ -1,23 +1,15 @@
-﻿using SaYLance.interfaces;
+﻿using SaYLance.components;
+using SaYLance.interfaces;
+using SaYLance.variable_types;
 
 namespace SaYLance.std_lib
 {
     public static class BasicCommandStorage
     {
-        static private Dictionary<string, BasicCommand> _cmnds = new(){
-            { "VariableDefinition", VariableDefinition() }
-        };
-
-        static public Isl_TypeValue InvokeCommand(string name, List<Isl_TypeValue> args)
-        {
-            if (_cmnds.TryGetValue(name, out BasicCommand command))
-                return command.Run(args);
-            return null;
-        }
-        static private BasicCommand VariableDefinition()
-        {
-            Func<List<Isl_TypeValue>, Isl_TypeValue> command = null;
-            return new BasicCommand(2, command);
-        }
+        static public  BasicCommandWithArgs VariableDefinition(string variableName, Isl_TypeValue value, int lineNumber) => new BasicCommandWithArgs(
+                    VariablesStorage.DefineNew,
+                    BasicCommandWithArgs.ArgsList(new sl_Int(lineNumber),new sl_String(variableName), value)
+                );
+        
     }
 }

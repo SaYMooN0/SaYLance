@@ -1,14 +1,15 @@
-﻿using SaYLance.interfaces;
+﻿using SaYLance.errors_related;
+using SaYLance.interfaces;
 using SaYLance.std_lib;
 using SaYLance.variable_types;
-using System;
-using System.Collections.Generic;
 
 namespace SaYLance.components
 {
     public static class VariablesStorage
     {
         private static Dictionary<string, Isl_TypeValue> _vars = new();
+        public static void Dispose() { _vars.Clear(); }
+
         //(string name) -> bool
         public static BasicCommand ContainsVariable = new BasicCommand(1, args =>
         {
@@ -17,49 +18,63 @@ namespace SaYLance.components
             return new sl_Bool(_ContainsVariable(args[0].ToString()));
         });
 
-        //(string name, Isl_TypeValue value) -> void
-        public static BasicCommand DefineNew = new BasicCommand(2, args =>
+        //(string name, Isl_TypeValue value, int lineNumber) -> void
+        public static BasicCommand DefineNew = new BasicCommand(3, args =>
+        {
+            if (args.Count != 3 || args[0] is null || args[1] is null || args[2] is null)
+                throw new ArgumentException("Invalid arguments for DefineNew");
+            sl_Int line;
+            if (!sl_Int.TryCreateFromString(args[0].ToString(), out line))
+                throw new ArgumentException();
+            _DefineNew(args[1].ToString(), args[2], line.Value);
+            return new sl_Void();
+        });
+
+        //(string name, int lineNumber) -> void
+        public static BasicCommand DeleteVariable = new BasicCommand(2, args =>
         {
             if (args.Count != 2 || args[0] is null || args[1] is null)
-                throw new ArgumentException("Invalid arguments for DefineNew");
-            _DefineNew(args[0].ToString(), args[1]);
-            return new sl_Void();
-        });
-
-        //(string name) -> void
-        public static BasicCommand DeleteVariable = new BasicCommand(1, args =>
-        {
-            if (args.Count != 1 || args[0] is null)
                 throw new ArgumentException("Invalid arguments for DeleteVariable");
-            _DeleteVariable(args[0].ToString());
+            sl_Int line;
+            if (!sl_Int.TryCreateFromString(args[1].ToString(), out line))
+                throw new ArgumentException();
+            _DeleteVariable(args[0].ToString(), line.Value);
             return new sl_Void();
         });
 
-        //(string name) -> Isl_TypeValue
-        public static BasicCommand GetVariable = new BasicCommand(1, args =>
+        //(string name, int lineNumber) -> Isl_TypeValue
+        public static BasicCommand GetVariable = new BasicCommand(2, args =>
         {
-            if (args.Count != 1 || args[0] is null)
+            if (args.Count != 2 || args[0] is null || args[1] is null)
                 throw new ArgumentException("Invalid arguments for GetVariable");
-            return _GetVariable(args[0].ToString());
+            sl_Int line;
+            if (!sl_Int.TryCreateFromString(args[1].ToString(), out line))
+                throw new ArgumentException();
+            return _GetVariable(args[0].ToString(), line.Value);
         });
-        private static bool _ContainsVariable(string name) =>_vars.ContainsKey(name); 
 
-        private static void _DefineNew(string name, Isl_TypeValue value)
+        private static bool _ContainsVariable(string name) => _vars.ContainsKey(name);
+
+        private static void _DefineNew(string name, Isl_TypeValue value, int lineNumber)
         {
             if (!_vars.ContainsKey(name))
                 _vars.Add(name, value);
             else
-                throw new ArgumentException($"Variable with name {name} already exists.");
+                throw new ExecutionException(ErrorMaker.DefinedVariableDefining(name, lineNumber));
         }
 
-        private static void _DeleteVariable(string name) { _vars.Remove(name); }
+        private static void _DeleteVariable(string name, int lineNumber)
+        {
+            if (!_vars.Remove(name))
+                throw new ExecutionException(ErrorMaker.UndefinedVariableDeleting(name, lineNumber));
+        }
 
-        private static Isl_TypeValue _GetVariable(string name)
+        private static Isl_TypeValue _GetVariable(string name, int lineNumber)
         {
             if (_vars.TryGetValue(name, out Isl_TypeValue value))
                 return value;
             else
-                throw new KeyNotFoundException($"Variable with name {name} does not exist.");
+                throw new ExecutionException(ErrorMaker.UndefinedVariableAccessing(name, lineNumber));
         }
     }
 }

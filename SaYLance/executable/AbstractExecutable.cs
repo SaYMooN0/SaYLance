@@ -12,26 +12,18 @@ namespace SaYLance.executable
     {
         public List<BasicCommandWithArgs> Functions { get; set; }
         public readonly ExecutableType Type;
-        private AbstractExecutable(List<BasicCommandWithArgs> functions, ExecutableType type)
+        public AbstractExecutable(List<BasicCommandWithArgs> functions, ExecutableType type)
         {
             Functions = functions;
             Type = type;
         }
-        public ExecutionResult Execute()
+        public AbstractExecutable(BasicCommandWithArgs function, ExecutableType type)
         {
-            throw new NotImplementedException("Can not execute Abstract Executable");
+            Functions = new() { function };
+            Type = type;
         }
-        static public AbstractExecutable MeaningLess() => new AbstractExecutable(null, ExecutableType.Abstract);
-        static public AbstractExecutable VariableDefining(string variableName, Isl_TypeValue value)
-        {
-            List<BasicCommandWithArgs> instruction = new List<BasicCommandWithArgs> {
-                new BasicCommandWithArgs(
-                    VariablesStorage.DefineNew,
-                    BasicCommandWithArgs.ArgsList( new sl_String(variableName), value)
-                )
-            };
-            return new AbstractExecutable(instruction, ExecutableType.Instruction);
-        }
+        public ExecutionResult Execute() { return ExecutionResult.Success(new sl_Void()); }
+        static public AbstractExecutable MeaningLess() => new AbstractExecutable(function: null, ExecutableType.Abstract);
 
     }
 }

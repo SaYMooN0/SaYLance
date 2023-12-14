@@ -20,6 +20,10 @@
 
         InvalidReceivedType,
         UnknownType,
-        NoValueReceived
+        NoValueReceived,
+
+        DefinedVariableDefining,
+        UndefinedVariableDeleting,
+        UndefinedVariableAccessing
     }
 }

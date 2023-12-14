@@ -7,10 +7,7 @@ namespace SaYLance.variable_types
     {
         public string Value { get; set; }
 
-        private sl_String(string value)
-        {
-            Value = value;
-        }
+        public sl_String(string value) { Value = value; }
 
         public object GetValue() => Value;
         public static bool IsValidFormat(string input)
@@ -23,7 +20,7 @@ namespace SaYLance.variable_types
         }
         bool Isl_TypeValue.IsValidFormat(string input) => sl_String.IsValidFormat(input);
 
-        public static bool FromString(string input, out sl_String result)
+        public static bool TryCreateFromString(string input, out sl_String result)
         {
             result = null;
             if (IsValidFormat(input))
@@ -37,8 +34,9 @@ namespace SaYLance.variable_types
         }
         public override string ToString()
         {
-            return $"\"{Value}\"";
+            return Value;
         }
+        public string ToStringWithQuotes() => $"\"{Value}\"";
 
 
     }

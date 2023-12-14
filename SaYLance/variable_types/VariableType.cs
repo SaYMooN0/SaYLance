@@ -2,7 +2,7 @@
 {
     public enum VariableType
     {
-        Null = 0,
+        Void = 0,
         Int = 1,
         String = 2,
         Bool = 3,

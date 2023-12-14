@@ -1,9 +1,8 @@
 ﻿using SaYLance.executable;
-using System.Collections.Generic;
 
 namespace SaYLance.components
 {
-    public class FunctionsContainer
+    public class FunctionsStorage
     {
         private Dictionary<string, Function> _funcs = new();
 

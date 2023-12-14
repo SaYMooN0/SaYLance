@@ -2,50 +2,61 @@
 using SaYLance.errors_related;
 using SaYLance.interfaces;
 using SaYLance.language_models;
+using SaYLance.parsing_components;
+using SaYLance.results;
 using System.Text.RegularExpressions;
 
 namespace SaYLance
 {
     public class Interpreter
     {
-        private readonly IDefaultTextIO textIO;
-        private ILanguageModel lanModel = null;
-        private FileReader fileReader = null;
-        private Parser parser = null;
+        private readonly IDefaultTextIO _TextIO;
+        private ILanguageModel _LanModel = null;
+        private FileReader _FileReader = null;
+        private Parser _Parser = null;
 
         public Interpreter(IDefaultTextIO textIO)
         {
-            this.textIO = textIO;
+            _TextIO = textIO;
         }
         public void Run(string filePath)
         {
-            fileReader = new FileReader(filePath);
-            Error? err = TryToSetLanguageModelFromHeader(fileReader.GetFirstLine()?.Content ?? string.Empty);
+            _FileReader = new FileReader(filePath);
+            Error? err = TryToSetLanguageModelFromHeader(_FileReader.GetFirstLine()?.Content ?? string.Empty);
             if (err is not null)
             {
                 End(err);
                 return;
             }
-            textIO.Log("Running");
-            parser = new(lanModel);
-            while(!fileReader.IsEnded)
+            _TextIO.Log("Running...");
+            _Parser = new(_LanModel);
+            ParsingResult parsingRes = null;
+            while (!_FileReader.IsEnded)
             {
-                string line = fileReader.GetNextNonEmptyLine()?.Content ?? string.Empty;
-                textIO.Log(line);
+                CodeLine? line = _FileReader.GetNextNonEmptyLine();
+                if (line is null || string.IsNullOrEmpty(line.Content))
+                    continue;
+                parsingRes = _Parser.ParseCodeLine(line.Content, line.LineNumber);
+                if(!parsingRes.IsSuccess)
+                {
+                    End(parsingRes.Error);
+                    return;
+                }
+                Executor.Execute(parsingRes.Executable);
             }
         }
         private void End(Error? error)
         {
-            fileReader.Dispose();
+            _FileReader.Dispose();
             if (error is not null)
             {
-                if (lanModel is not null)
-                    textIO.Error(lanModel.ErrToStr(error));
+                if (_LanModel is not null)
+                    _TextIO.Error(_LanModel.ErrToStr(error));
                 else
-                    textIO.Error(error.ToString());
+                    _TextIO.Error(error.ToString());
                 return;
             }
-            textIO.Log("Program was completed successfully");
+            _TextIO.Log("Program was completed successfully");
         }
         private Error? TryToSetLanguageModelFromHeader(string header)
         {
@@ -65,12 +76,12 @@ namespace SaYLance
             {
                 case "default":
                     {
-                        lanModel = new DefaultLanguageModel();
+                        _LanModel = new DefaultLanguageModel();
                         return null;
                     }
                 case "russian":
                     {
-                        lanModel = new RusLanguageModel();
+                        _LanModel = new RusLanguageModel();
                         return null;
                     }
                 default:

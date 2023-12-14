@@ -1,4 +1,5 @@
 ﻿using SaYLance.errors_related;
+using SaYLance.variable_types;
 
 public static class ErrorMaker
 {
@@ -26,13 +27,12 @@ public static class ErrorMaker
         new Error(ErrorCode.AssignmentExpected, "It is impossible to create a variable without assigning it a value", line, character); 
     public static Error AssignmentExpected(int line, int character) =>
         new Error(ErrorCode.AssignmentExpected, "Assignment expected", line, character);
-
-    public static Error InvalidReceivedType(string typeName, int line, int character) =>
-        new Error(ErrorCode.InvalidReceivedType, $"Invalid received type: {typeName}", line, character);
     public static Error InvalidVariableName(string variableName, int line, int character) =>
        new Error(ErrorCode.InvalidVariableName, $"Invalid variable name: '{variableName}'", line, character);
     public static Error UnknownType(string type, int line, int character) =>
        new Error(ErrorCode.UnknownType, $"Received unknown type name: '{type}'", line, character);
     public static Error NoValueReceived(int line, int character) =>
        new Error(ErrorCode.UnknownType, $"Expected value. No value received", line, character);
+    public static Error UnableToParse(string value, VariableType expectedType,  int line, int character) =>
+       new Error(ErrorCode.UnknownType, $"Failed to parse {value} into {expectedType} type", line, character);
 }

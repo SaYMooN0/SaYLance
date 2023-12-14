@@ -16,7 +16,7 @@ namespace SaYLance.components
 
         public CodeLine? GetFirstLine()
         {
-            lastReadLine = 1;
+            lastReadLine = 0;
             return ReadNextLine();
         }
 

@@ -16,7 +16,7 @@
         public Error(ErrorCode errorCode, string message) : this(errorCode, message,1,1) { }
         public override string ToString()
         {
-            return $"{ErrorCode} at {Line}:{Character}\n{Message}";
+            return $" &{{{(int)ErrorCode}}} at {Line}:{Character}\n{Message}";
         }
     }
 }

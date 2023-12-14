@@ -1,12 +1,18 @@
 ﻿using SaYLance.interfaces;
+using SaYLance.results;
+using SaYLance.std_lib;
 
 namespace SaYLance.executable
 {
-    public class Function:IExecutable
+    public class Function : IExecutable
     {
-        private InstructionsBlock Instructions;
+        public List<BasicCommandWithArgs> Functions => throw new NotImplementedException();
 
-        public Isl_TypeValue Execute(Dictionary<string, Isl_TypeValue> arguments)
+        public ExecutionResult Execute()
+        {
+            throw new NotImplementedException();
+        }
+        static public Function FromAbstract(AbstractExecutable abstractEx)
         {
             throw new NotImplementedException();
         }

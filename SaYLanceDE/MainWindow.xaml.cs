@@ -3,7 +3,6 @@ using SaYLance;
 using SaYLanceDE.src;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 namespace SaYLanceDE
 {
     public partial class MainWindow : Window
@@ -32,6 +31,7 @@ namespace SaYLanceDE
             richTextBox.Document.Blocks.Clear();
             Interpreter interpreter = new(textField);
             interpreter.Run(filePath);
+            
         }
         private void BrowseFileClick(object sender, RoutedEventArgs e)
         {

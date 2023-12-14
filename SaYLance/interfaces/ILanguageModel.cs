@@ -22,12 +22,12 @@ namespace SaYLance.interfaces
         }
         public VariableType GetVariableTypeFromString(string type)
         {
-            if (String.IsNullOrWhiteSpace(type)) return VariableType.Null;
+            if (String.IsNullOrWhiteSpace(type)) return VariableType.Void;
             if (type.Trim() == BoolTypeKeyWord) return VariableType.Bool;
             if (type.Trim() == FloatTypeKeyWord) return VariableType.Float;
             if (type.Trim() == IntTypeKeyWord) return VariableType.Int;
             if (type.Trim() == StringTypeKeyWord) return VariableType.String;
-            return VariableType.Null;
+            return VariableType.Void;
         }
 
     }

@@ -1,16 +1,18 @@
 ﻿using SaYLance.interfaces;
+using SaYLance.results;
+using SaYLance.std_lib;
 
 namespace SaYLance.executable
 {
-    internal class InstructionsBlock : IExecutable
+    public class InstructionsBlock : IExecutable
     {
-        private List<Isl_TypeValue> InnerVariables { get; set; } = new List<Isl_TypeValue>();
-        private LinkedList<Instruction> Instructions { get; set; } = new();
-        public InstructionsBlock(LinkedList<Instruction> instructions)
+        public List<BasicCommandWithArgs> Functions => throw new NotImplementedException();
+
+        public ExecutionResult Execute()
         {
-            Instructions = instructions;
+            throw new NotImplementedException();
         }
-        public Isl_TypeValue Execute(Dictionary<string, Isl_TypeValue> arguments)
+        static public InstructionsBlock FromAbstract(AbstractExecutable abstractEx)
         {
             throw new NotImplementedException();
         }

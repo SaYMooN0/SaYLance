@@ -1,4 +1,6 @@
 ﻿using SaYLance.interfaces;
+using SaYLance.results;
+using SaYLance.std_lib;
 
 namespace SaYLance.executable
 {
@@ -7,13 +9,14 @@ namespace SaYLance.executable
      
         private InstructionsBlock _instructions;
         private Condition _condition;
-        public Loop(InstructionsBlock instructions, Condition condition)
-        {
-            _instructions = instructions;
-            _condition = condition;
-        }
 
-        public Isl_TypeValue Execute(Dictionary<string, Isl_TypeValue> arguments)
+        public List<BasicCommandWithArgs> Functions => throw new NotImplementedException();
+
+        public ExecutionResult Execute()
+        {
+            throw new NotImplementedException();
+        }
+        static public Loop FromAbstract(AbstractExecutable abstractEx)
         {
             throw new NotImplementedException();
         }

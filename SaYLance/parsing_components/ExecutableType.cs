@@ -3,7 +3,6 @@
     public enum ExecutableType
     {
         Condition,
-        Function,
         Instruction,
         InstructionsBlock,
         Loop,

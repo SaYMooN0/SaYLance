@@ -6,8 +6,7 @@ namespace SaYLance.executable
 {
     public class InstructionsBlock : IExecutable
     {
-        public List<BasicCommandWithArgs> Functions => throw new NotImplementedException();
-
+        public List<BasicCommandWithArgs> Commands => throw new NotImplementedException();
         public ExecutionResult Execute()
         {
             throw new NotImplementedException();

@@ -3,6 +3,7 @@ using SaYLance.results;
 using SaYLance.parsing_components;
 using SaYLance.variable_types;
 using SaYLance.errors_related;
+using SaYLance.function_related;
 
 namespace SaYLance.components
 {
@@ -16,11 +17,6 @@ namespace SaYLance.components
                     {
                         Condition condition = Condition.FromAbstract(executable);
                         return ConditionExecution(condition);
-                    }
-                case ExecutableType.Function:
-                    {
-                        Function function = Function.FromAbstract(executable);
-                        return FunctionExecution(function);
                     }
                 case ExecutableType.Instruction:
                     {

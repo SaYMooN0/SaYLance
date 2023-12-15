@@ -6,6 +6,6 @@ namespace SaYLance.interfaces
     public interface IExecutable
     {
         public ExecutionResult Execute();
-        public List<BasicCommandWithArgs> Functions { get; }
+        public List<BasicCommandWithArgs> Commands { get; }
     }
 }

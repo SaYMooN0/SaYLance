@@ -10,7 +10,7 @@ namespace SaYLance.executable
         private InstructionsBlock _instructions;
         private Condition _condition;
 
-        public List<BasicCommandWithArgs> Functions => throw new NotImplementedException();
+        public List<BasicCommandWithArgs> Commands => throw new NotImplementedException();
 
         public ExecutionResult Execute()
         {

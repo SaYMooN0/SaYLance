@@ -1,15 +1,51 @@
-﻿using System.Windows;
+﻿
+using SaYLance.interfaces;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace SaYLanceDE.src
 {
-    public partial class TextField : SaYLance.interfaces.IDefaultTextIO
+    public partial class TextField : IDefaultTextIO
     {
         private RichTextBox _textBox;
+        private TaskCompletionSource<string> _inputCompletionSource;
 
-        public TextField(RichTextBox richTextBox) { _textBox = richTextBox; }
+        public TextField(RichTextBox richTextBox)
+        {
+            _textBox = richTextBox;
+            _textBox.IsReadOnly = true;
+            _textBox.PreviewKeyDown += TextBoxOnPreviewKeyDown;
+        }
+
+        private void TextBoxOnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (_textBox.IsReadOnly)
+                return;
+
+            if (e.Key == Key.Enter && Keyboard.Modifiers != ModifierKeys.Shift)
+            {
+                e.Handled = true;
+
+                TextRange textRange = new TextRange(_textBox.Document.ContentStart, _textBox.Document.ContentEnd);
+                string text = textRange.Text.Trim();
+
+                _textBox.IsReadOnly = true;
+                _inputCompletionSource.SetResult(text);
+            }
+        }
+
+        public Task<string> StringInputAsync()
+        {
+            _inputCompletionSource = new TaskCompletionSource<string>();
+            _textBox.Document.Blocks.Clear();
+            _textBox.IsReadOnly = false;
+            return _inputCompletionSource.Task;
+        }
+
         private void WriteText(string text, Brush textColor)
         {
             var paragraph = new Paragraph(new Run(text))
@@ -20,12 +56,6 @@ namespace SaYLanceDE.src
             };
             _textBox.Document.Blocks.Add(paragraph);
         }
-
-        public void AllowInput()
-        {
-            _textBox.IsReadOnly =true;
-        }
-
         public void Clear()
         {
             _textBox.Document.Blocks.Clear();
@@ -44,6 +74,5 @@ namespace SaYLanceDE.src
         {
             WriteText("Warning: " + warning, Brushes.Orange);
         }
-
     }
 }

@@ -10,20 +10,20 @@ namespace SaYLance.executable
 {
     public class AbstractExecutable : IExecutable
     {
-        public List<BasicCommandWithArgs> Functions { get; set; }
+        public List<BasicCommandWithArgs> Commands { get; set; }
         public readonly ExecutableType Type;
-        public AbstractExecutable(List<BasicCommandWithArgs> functions, ExecutableType type)
+        public AbstractExecutable(List<BasicCommandWithArgs> commands, ExecutableType type)
         {
-            Functions = functions;
+            Commands = commands;
             Type = type;
         }
-        public AbstractExecutable(BasicCommandWithArgs function, ExecutableType type)
+        public AbstractExecutable(BasicCommandWithArgs commands, ExecutableType type)
         {
-            Functions = new() { function };
+            Commands = new() { commands };
             Type = type;
         }
         public ExecutionResult Execute() { return ExecutionResult.Success(new sl_Void()); }
-        static public AbstractExecutable MeaningLess() => new AbstractExecutable(function: null, ExecutableType.Abstract);
+        static public AbstractExecutable MeaningLess() => new AbstractExecutable(commands: (BasicCommandWithArgs?)null, ExecutableType.Abstract);
 
     }
 }

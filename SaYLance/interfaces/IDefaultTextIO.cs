@@ -2,7 +2,7 @@
 {
     public interface IDefaultTextIO
     {
-        public void AllowInput();
+        public Task<string> StringInputAsync();
         public void Clear();
         public void Log(string message);
         public void Error(string error);

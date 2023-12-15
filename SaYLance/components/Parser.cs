@@ -47,7 +47,7 @@ namespace SaYLance.components
                 {
 
                     VariableType type = _lm.GetVariableTypeFromString(stringTokens[3]);
-                    if (IsFunctionCallingConstruction(stringTokens[5..]))
+                    if (IsFunctionConstruction(stringTokens[5..]))
                     {
                         Isl_TypeValue? varValue = GetSl_ValueFromStringTokenSequence(stringTokens[5..], type);
                         throw new NotImplementedException();
@@ -113,7 +113,7 @@ namespace SaYLance.components
         }
         static private Isl_TypeValue? GetSl_ValueFromStringTokenSequence(string[] tokenSequence, VariableType type)
         {
-            if (IsFunctionCallingConstruction(tokenSequence))
+            if (IsFunctionConstruction(tokenSequence))
             {
                 //for  function create instructs block with helping vars
                 throw new NotImplementedException("no function support now");
@@ -122,7 +122,7 @@ namespace SaYLance.components
 
 
         }
-        static private bool IsFunctionCallingConstruction(string[] tokenSequence)
+        static private bool IsFunctionConstruction(string[] tokenSequence)
         {
             return false;
         }

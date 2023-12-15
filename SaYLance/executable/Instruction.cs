@@ -7,20 +7,20 @@ namespace SaYLance.executable
 {
     public class Instruction : IExecutable
     {
-        public List<BasicCommandWithArgs> Functions { get; set; }
+        private Instruction(List<BasicCommandWithArgs> commands){Commands = commands;}
+
+        public List<BasicCommandWithArgs> Commands { get; set; }
 
         public ExecutionResult Execute()
         {
-            if (Functions is null || Functions.Count < 1)
-                throw new ArgumentException("Undefined functions");
-            else if (Functions.Count > 1)
-                throw new ArgumentException("To many functions for one instruction");
-            Isl_TypeValue? result = Functions[0].Run();
+            if (Commands is null || Commands.Count < 1)
+                throw new ArgumentException("Undefined commands");
+            else if (Commands.Count > 1)
+                throw new ArgumentException("To many commands for one instruction");
+            Isl_TypeValue? result = Commands[0].Run();
             return ExecutionResult.Success(result);
         }
-        static public Instruction FromAbstract(AbstractExecutable abstractEx)
-        {
-            return new Instruction() { Functions = abstractEx.Functions };
-        }
+        static public Instruction FromAbstract(AbstractExecutable abstractEx) => new Instruction(abstractEx.Commands);
+
     }
 }

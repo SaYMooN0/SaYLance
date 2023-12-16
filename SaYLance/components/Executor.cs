@@ -4,6 +4,8 @@ using SaYLance.parsing_components;
 using SaYLance.variable_types;
 using SaYLance.errors_related;
 using SaYLance.function_related;
+using SaYLance.interfaces;
+using SaYLance.std_lib;
 
 namespace SaYLance.components
 {
@@ -59,15 +61,20 @@ namespace SaYLance.components
                 );
             }
         }
-
-        static private ExecutionResult FunctionExecution(Function function)
-        {
-            throw new NotImplementedException();
-        }
-
         static private ExecutionResult InstructionsBlockExecution(InstructionsBlock block)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return block.Execute();
+            }
+            catch (ExecutionException ex)
+            {
+                return ExecutionResult.ExecutionError(ex.error);
+            }
+            catch (Exception ex)
+            {
+                return ExecutionResult.ExecutionError(new Error(ErrorCode.NoCodeError, ex.Message));
+            }
         }
 
         static private ExecutionResult LoopExecution(Loop loop)

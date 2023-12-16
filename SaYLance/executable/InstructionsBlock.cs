@@ -1,4 +1,5 @@
-﻿using SaYLance.interfaces;
+﻿using SaYLance.errors_related;
+using SaYLance.interfaces;
 using SaYLance.results;
 using SaYLance.std_lib;
 
@@ -6,14 +7,18 @@ namespace SaYLance.executable
 {
     public class InstructionsBlock : IExecutable
     {
-        public List<BasicCommandWithArgs> Commands => throw new NotImplementedException();
+        private InstructionsBlock(List<BasicCommandWithArgs> commands) { Commands = commands; }
+
+        public List<BasicCommandWithArgs> Commands { get; private set; }
         public ExecutionResult Execute()
         {
-            throw new NotImplementedException();
+                Isl_TypeValue? result = null;
+                foreach (BasicCommandWithArgs cmnd in Commands)
+                {
+                    result = cmnd.Run();
+                }
+                return ExecutionResult.Success(result);
         }
-        static public InstructionsBlock FromAbstract(AbstractExecutable abstractEx)
-        {
-            throw new NotImplementedException();
-        }
+        static public InstructionsBlock FromAbstract(AbstractExecutable abstractEx)=> new InstructionsBlock(abstractEx.Commands);
     }
 }

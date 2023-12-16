@@ -28,7 +28,7 @@ namespace SaYLance.function_related
             List<BasicCommandWithArgs> parsed = new();
             if (Protocol.NotesCount != Commands.Count)
                 throw new Exception("Notes count is not equal to commands count");
-            for (int i = 0; i < 0; i++)
+            for (int i = 0; i < arguments.Count; i++)
             {
                 var protocolNote = Protocol.GetNoteByIndex(i);
                 if (Commands[i].ArgumentsCount == -1)

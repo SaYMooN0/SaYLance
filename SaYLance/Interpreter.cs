@@ -1,5 +1,6 @@
 ﻿using SaYLance.components;
 using SaYLance.errors_related;
+using SaYLance.function_related;
 using SaYLance.interfaces;
 using SaYLance.language_models;
 using SaYLance.parsing_components;
@@ -11,13 +12,15 @@ namespace SaYLance
     public class Interpreter
     {
         private readonly IDefaultTextIO _TextIO;
-        private ILanguageModel _LanModel = null;
+        private LanguageModel _LanModel = new();
         private FileReader _FileReader = null;
         private Parser _Parser = null;
+        private FunctionsStorage _funcStorage = null;
 
         public Interpreter(IDefaultTextIO textIO)
         {
             _TextIO = textIO;
+
         }
         public void Run(string filePath)
         {
@@ -25,11 +28,12 @@ namespace SaYLance
             Error? err = TryToSetLanguageModelFromHeader(_FileReader.GetFirstLine()?.Content ?? string.Empty);
             if (err is not null)
             {
-                End(err);
-                return;
+                End(err); return;
             }
             _TextIO.Log("Running...");
-            _Parser = new(_LanModel);
+            _funcStorage = new(_TextIO, _LanModel);
+            _Parser = new(_LanModel, _funcStorage);
+     
             ParsingResult parsingRes = null;
             ExecutionResult executionRes = null;
             while (!_FileReader.IsEnded)
@@ -40,8 +44,7 @@ namespace SaYLance
                 parsingRes = _Parser.ParseCodeLine(line.Content, line.LineNumber);
                 if (!parsingRes.IsSuccess)
                 {
-                    End(parsingRes.Error);
-                    return;
+                    End(parsingRes.Error); return;
                 }
                 executionRes = Executor.Execute(parsingRes.Executable);
                 if (!executionRes.IsSuccess)
@@ -88,12 +91,12 @@ namespace SaYLance
             {
                 case "default":
                     {
-                        _LanModel = new DefaultLanguageModel();
+                        _LanModel = new LanguageModel();
                         return null;
                     }
                 case "russian":
                     {
-                        _LanModel = new RusLanguageModel();
+                        _LanModel = new CustomLanguageModel();
                         return null;
                     }
                 default:

@@ -40,5 +40,13 @@ public static class ErrorMaker
     public static Error UndefinedVariableDeleting(string variableName, int line) =>
        new Error(ErrorCode.UndefinedVariableDeleting, $"Can not delete undefined variable '{variableName}'", line, 1);
     public static Error UndefinedVariableAccessing(string variableName, int line) =>
-       new Error(ErrorCode.UndefinedVariableAccessing, $"variable '{variableName}' is not defined", line, 1);
+       new Error(ErrorCode.UndefinedVariableAccessing, $"Variable '{variableName}' is not defined", line, 1);
+    public static Error UndefinedFunctionAccessing(string functionName, int line) =>
+       new Error(ErrorCode.UndefinedVariableAccessing, $"Function '{functionName}' is not defined", line, 1);
+    public static Error FunctionNameExpected(int line, int character) =>
+       new Error(ErrorCode.FunctionNameExpected, $"Function name was expected", line, character);
+    public static Error ParameterFunctionCall(int line) =>
+       new Error(ErrorCode.ParameterFunctionCall, $"Function can't be called as a parameter. Define a variable, assign it a function value, and pass it as a parameter", line, 1);
+    public static Error InvalidFunctionCallFormat(int line) =>
+       new Error(ErrorCode.ParameterFunctionCall, $"Invalid function call format", line, 1);
 }

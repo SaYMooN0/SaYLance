@@ -24,6 +24,13 @@
 
         DefinedVariableDefining,
         UndefinedVariableDeleting,
-        UndefinedVariableAccessing
+        UndefinedVariableAccessing,
+        UndefinedFunctionAccessing,
+
+        FunctionNameExpected,
+        ParameterFunctionCall,
+        InvalidFunctionCallFormat,
+
+        UndefinedVariable
     }
 }

@@ -1,26 +1,43 @@
 ﻿using SaYLance.errors_related;
-using SaYLance.interfaces;
-using SaYLance.variable_types;
 
 namespace SaYLance.language_models
 {
-    internal class RusLanguageModel : ILanguageModel
+    public class CustomLanguageModel : LanguageModel
     {
-        public string VariableDefinitionWord { get; } = "пусть";
-        public char VariableNameAndTypeDivider { get; } = ':';
-        public string InstructionBlockOpener { get; } = "{";
-        public string InstructionBlockCloser { get; } = "}";
-        public string BoolTypeKeyWord { get; } = "логический";
-        public string FloatTypeKeyWord { get; } = "вещественный";
-        public string IntTypeKeyWord { get; } = "целочисленный";
-        public string StringTypeKeyWord { get; } = "строчный";
-        public string ErrToStr(Error error)
+        private Func<Error, string> _errToStrFunc;
+        public CustomLanguageModel(Func<Error, string> errToStrFunc = null, params KeyValuePair<string, string>[] keyWordPairs)
         {
-            return $"{error.ErrorCode} в строке {error.Line} на символе {error.Character}\n{error.Message}";
+            _errToStrFunc = errToStrFunc ?? base.ErrToStr;
+
+            foreach (var pair in keyWordPairs)
+            {
+                if (!KeyWords.ContainsKey(pair.Key))
+                    throw new ArgumentException($"Key '{pair.Key}' does not exist in the base KeyWords dictionary.");
+
+                KeyWords[pair.Key] = pair.Value;
+            }
         }
-        public VariableType GetVariableTypeFromString(string type)
+
+        public new string ErrToStr(Error error)
         {
-            throw new NotImplementedException();
+            return _errToStrFunc(error);
         }
+        public static CustomLanguageModel DefaultRusLanModel()
+        {
+            var rusKeyWordPairs = new KeyValuePair<string, string>[]
+            {
+        new KeyValuePair<string, string>("varDefWord", "пусть"),
+        new KeyValuePair<string, string>("bool", "логический"),
+        new KeyValuePair<string, string>("float", "вещественный"),
+        new KeyValuePair<string, string>("int", "целочисленный"),
+        new KeyValuePair<string, string>("string", "строчный"),
+            };
+
+            return new CustomLanguageModel(
+                error => $"{error.ErrorCode} в строке {error.Line} на символе {error.Character}\n{error.Message}",
+                rusKeyWordPairs
+            );
+        }
+
     }
 }

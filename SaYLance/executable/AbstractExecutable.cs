@@ -4,7 +4,6 @@ using SaYLance.parsing_components;
 using SaYLance.results;
 using SaYLance.std_lib;
 using SaYLance.variable_types;
-using System.Collections.Generic;
 
 namespace SaYLance.executable
 {
@@ -24,6 +23,15 @@ namespace SaYLance.executable
         }
         public ExecutionResult Execute() { return ExecutionResult.Success(new sl_Void()); }
         static public AbstractExecutable MeaningLess() => new AbstractExecutable(commands: (BasicCommandWithArgs?)null, ExecutableType.Abstract);
+        public AbstractExecutable Combine(params AbstractExecutable[] executables)
+        {
+            List<BasicCommandWithArgs> commandWithArgs = new();
+            foreach (var ex in executables)
+            {
+                commandWithArgs.AddRange(ex.Commands);
+            }
+            return new AbstractExecutable(commandWithArgs, ExecutableType.InstructionsBlock);
+        }
 
     }
 }

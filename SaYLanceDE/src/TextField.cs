@@ -1,5 +1,4 @@
-﻿
-using SaYLance.interfaces;
+﻿using SaYLance.interfaces;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +16,7 @@ namespace SaYLanceDE.src
         public TextField(RichTextBox richTextBox)
         {
             _textBox = richTextBox;
-            _textBox.IsReadOnly = true;
+            _textBox.Dispatcher.Invoke(() => _textBox.IsReadOnly = true);
             _textBox.PreviewKeyDown += TextBoxOnPreviewKeyDown;
         }
 
@@ -30,36 +29,48 @@ namespace SaYLanceDE.src
             {
                 e.Handled = true;
 
-                TextRange textRange = new TextRange(_textBox.Document.ContentStart, _textBox.Document.ContentEnd);
-                string text = textRange.Text.Trim();
+                string text = _textBox.Dispatcher.Invoke(() =>
+                {
+                    TextRange textRange = new TextRange(_textBox.Document.ContentStart, _textBox.Document.ContentEnd);
+                    string text = textRange.Text.Trim();
+                    _textBox.IsReadOnly = true;
+                    return text;
+                });
 
-                _textBox.IsReadOnly = true;
                 _inputCompletionSource.SetResult(text);
             }
         }
 
         public Task<string> StringInputAsync()
         {
-            _inputCompletionSource = new TaskCompletionSource<string>();
-            _textBox.Document.Blocks.Clear();
-            _textBox.IsReadOnly = false;
-            return _inputCompletionSource.Task;
+            return _textBox.Dispatcher.Invoke(() =>
+            {
+                _inputCompletionSource = new TaskCompletionSource<string>();
+                _textBox.Document.Blocks.Clear();
+                _textBox.IsReadOnly = false;
+                return _inputCompletionSource.Task;
+            });
         }
 
         private void WriteText(string text, Brush textColor)
         {
-            var paragraph = new Paragraph(new Run(text))
+            _textBox.Dispatcher.Invoke(() =>
             {
-                Foreground = textColor,
-                LineHeight = 1.2,
-                Margin = new Thickness(0)
-            };
-            _textBox.Document.Blocks.Add(paragraph);
+                var paragraph = new Paragraph(new Run(text))
+                {
+                    Foreground = textColor,
+                    LineHeight = 1.2,
+                    Margin = new Thickness(0)
+                };
+                _textBox.Document.Blocks.Add(paragraph);
+            });
         }
+
         public void Clear()
         {
-            _textBox.Document.Blocks.Clear();
+            _textBox.Dispatcher.Invoke(() => _textBox.Document.Blocks.Clear());
         }
+
         public void Error(string error)
         {
             WriteText("Error: " + error, Brushes.Red);

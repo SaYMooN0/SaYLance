@@ -17,8 +17,8 @@ namespace SaYLance.function_related
             textIO = textInputOutput;
             _funcs = new Dictionary<string, Function>
             {
-                { languageModel.GetKeyWordFor("printFunc"), new Function(new BasicCommand(-1, WriteIntoDefaultTextIO), -1) },
-                { languageModel.GetKeyWordFor("readLineFunc"), new Function(new BasicCommand(1, ReadStringFromDefaultTextIO), -1) },
+                { languageModel.GetKeyWordFor("printFunc"), new Function(new BasicCommand(-1, WriteIntoDefaultTextIO)) },
+                { languageModel.GetKeyWordFor("readLineFunc"), new Function(new BasicCommand(0, ReadStringFromDefaultTextIO)) },
             };
         }
         public void AddFunction(string name, Function function) { _funcs.Add(name, function); }
@@ -40,8 +40,6 @@ namespace SaYLance.function_related
         };
         private Func<List<Isl_TypeValue>, Isl_TypeValue> ReadStringFromDefaultTextIO = (List<Isl_TypeValue> values) =>
         {
-            if (values.Count < 1)
-                throw new Exception("not enough args for ReadStringFromDefaultTextIO");
             return new sl_String(Task.Run(async () =>
                 await textIO.StringInputAsync()).Result
             );

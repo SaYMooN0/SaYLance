@@ -12,6 +12,10 @@ namespace SaYLance.std_lib
         {
             CommandsWithArgs = new Tuple<BasicCommand, List<Isl_TypeValue>>(command, new List<Isl_TypeValue>() { argument });
         }
+        public BasicCommandWithArgs(BasicCommand command)
+        {
+            CommandsWithArgs = new Tuple<BasicCommand, List<Isl_TypeValue>>(command, new List<Isl_TypeValue>());
+        }
         private Tuple<BasicCommand, List<Isl_TypeValue>> CommandsWithArgs { get; set; }
         private List<Isl_TypeValue> Arguments => CommandsWithArgs.Item2;
         public BasicCommand Command => CommandsWithArgs.Item1;

@@ -1,5 +1,6 @@
 ﻿using SaYLance.executable;
 using SaYLance.interfaces;
+using SaYLance.parsing_components;
 using SaYLance.std_lib;
 
 namespace SaYLance.function_related
@@ -13,18 +14,25 @@ namespace SaYLance.function_related
             Commands = commands;
             Protocol = protocol;
         }
-        public Function(BasicCommand command, int argsCount)
+        public Function(BasicCommand command)
         {
             Commands = new() { command };
-            Protocol = new FunctionProtocol(argsCount);
+            Protocol = new FunctionProtocol(command.ArgumentsCount);
         }
-        public void AddCommand(BasicCommand command, int argsCount)
+        public void AddCommand(BasicCommand command)
         {
             Commands.Add(command);
-            Protocol.AddNote(argsCount);
+            Protocol.AddNote(command.ArgumentsCount);
         }
         public InstructionsBlock ParseToInstructions(List<Isl_TypeValue> arguments)
         {
+     
+            if (Commands.Count == 1 && (arguments is null || arguments.Count == 0))
+            {
+                return InstructionsBlock.FromAbstract(
+                  new AbstractExecutable(new BasicCommandWithArgs(Commands[0]),
+                  ExecutableType.InstructionsBlock));
+            }
             List<BasicCommandWithArgs> parsed = new();
             if (Protocol.NotesCount != Commands.Count)
                 throw new Exception("Notes count is not equal to commands count");

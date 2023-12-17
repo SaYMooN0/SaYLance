@@ -2,6 +2,7 @@
 using SaYLance;
 using SaYLanceDE.src;
 using System.IO;
+using System.Threading;
 using System.Windows;
 namespace SaYLanceDE
 {
@@ -11,7 +12,7 @@ namespace SaYLanceDE
         {
             InitializeComponent();
             richTextBox.IsReadOnly = true;
-         
+
         }
 
         private void RunButtonClick(object sender, RoutedEventArgs e)
@@ -28,10 +29,15 @@ namespace SaYLanceDE
                 textField.Error(ex.Message);
                 return;
             }
+
             richTextBox.Document.Blocks.Clear();
-            Interpreter interpreter = new(textField);
-            interpreter.Run(filePath);
-            
+            new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = false;
+                    Interpreter interpreter = new(textField);
+                    interpreter.Run(filePath);
+                }).Start();
+
         }
         private void BrowseFileClick(object sender, RoutedEventArgs e)
         {
